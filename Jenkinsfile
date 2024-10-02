@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image from the Dockerfile in the repo
-                    sh 'docker build -f Dockerfile-python -t ghcr.io/YohanesAgengHZP/testing-cicd:latest .'
+                    sh 'docker build -f Dockerfile-python -t ghcr.io/yohanesagenghzp/testing-cicd:latest .'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
                 script {
                     // Log in to GHCR.io using the GitHub PAT
                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'PAT_CERT')]) {
-                        sh 'echo $PAT_CERT | docker login ghcr.io -u YohanesAgengHZP --password-stdin'
+                        sh 'echo $PAT_CERT | docker login ghcr.io -u yohanesagenghzp --password-stdin'
                     }
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Push the Docker image to GHCR.io
-                    sh 'docker push ghcr.io/YohanesAgengHZP/testing-cicd:latest'
+                    sh 'docker push ghcr.io/yohanesagenghzp/testing-cicd:latest'
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Optional cleanup step to remove the local Docker image
-                    sh 'docker rmi ghcr.io/YohanesAgengHZP/testing-cicd:latest'
+                    sh 'docker rmi ghcr.io/yohanesagenghzp/testing-cicd:latest'
                 }
             }
         }
