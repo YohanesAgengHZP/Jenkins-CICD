@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image from the Dockerfile in the repo
-                    sh 'docker build -f Dockerfile-python -t testing-cicd:latest .'
+                    sh 'docker build -f Dockerfile-python -t ghcr.io/YohanesAgengHZP/testing-cicd:latest .'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Push the Docker image to GHCR.io
-                    sh 'docker push testing-cicd:latest'
+                    sh 'docker push ghcr.io/YohanesAgengHZP/testing-cicd:latest'
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Optional cleanup step to remove the local Docker image
-                    sh 'docker rmi testing-cicd:latest'
+                    sh 'docker rmi ghcr.io/YohanesAgengHZP/testing-cicd:latest'
                 }
             }
         }
