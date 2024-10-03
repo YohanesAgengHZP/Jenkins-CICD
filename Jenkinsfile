@@ -2,15 +2,13 @@ pipeline {
     agent any
 
     environment {
-        // Replace with your GitHub username and repository details
         IMAGE_NAME = 'ghcr.io/YohanesAgengHZP/Jenkins-CICD.git:latest'
-        DOCKER_CREDENTIALS_ID = 'PAT_CERT'  // Jenkins credential ID for GitHub PAT
+        DOCKER_CREDENTIALS_ID = 'PAT_CERT'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from GitHub
                 git url: 'https://github.com/YohanesAgengHZP/Jenkins-CICD.git', branch: 'main'
             }
         }
@@ -18,8 +16,22 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from the Dockerfile in the repo
                     sh 'docker build -f Dockerfile-python -t ghcr.io/yohanesagenghzp/testing-cicd:latest .'
+                }
+            }
+        }
+        
+        stage('Test Flask App') {
+            steps {
+                script {
+                    // Run the Flask app container in detached mode
+                    sh 'docker run -d -p 5000:5000 --name flask-app-test ghcr.io/yohanesagenghzp/testing-cicd:latest'
+                    
+                    // Wait for Flask app to start up and be ready
+                    retry(5) { // Retry up to 5 times
+                        sleep 3 // Wait for 3 seconds between each retry
+                        sh 'curl -s http://localhost:5000 | grep "Hello, Jenkins CI/CD with Docker!"'
+                    }
                 }
             }
         }
@@ -27,7 +39,6 @@ pipeline {
         stage('Login to GHCR') {
             steps {
                 script {
-                    // Log in to GHCR.io using the GitHub PAT
                     withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'PAT_CERT')]) {
                         sh 'echo $PAT_CERT | docker login ghcr.io -u yohanesagenghzp --password-stdin'
                     }
@@ -38,7 +49,6 @@ pipeline {
         stage('Push Docker Image to GHCR') {
             steps {
                 script {
-                    // Push the Docker image to GHCR.io
                     sh 'docker push ghcr.io/yohanesagenghzp/testing-cicd:latest'
                 }
             }
@@ -47,8 +57,12 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    // Optional cleanup step to remove the local Docker image
-                    sh 'docker rmi ghcr.io/yohanesagenghzp/testing-cicd:latest'
+                    // Stop and remove the Flask app container
+                    sh 'docker stop flask-app-test || true'
+                    sh 'docker rm flask-app-test || true'
+                    
+                    // Optional: Remove the local Docker image
+                    sh 'docker rmi ghcr.io/yohanesagenghzp/testing-cicd:latest || true'
                 }
             }
         }
@@ -56,7 +70,6 @@ pipeline {
 
     post {
         always {
-            // Clean up workspace after build
             cleanWs()
         }
     }
