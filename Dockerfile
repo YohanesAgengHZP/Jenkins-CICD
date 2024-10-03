@@ -5,7 +5,7 @@ USER root
 
 # Install Docker CLI and related dependencies in one layer
 RUN apt-get update && \
-    apt-get install -y lsb-release curl gnupg && \
+    apt-get install -y lsb-release curl gnupg curl && \
     curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
     https://download.docker.com/linux/debian/gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
