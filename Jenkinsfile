@@ -24,6 +24,13 @@ pipeline {
         stage('Test Flask App') {
             steps {
                 script {
+                    // Stop and remove the container if it exists
+                    sh '''
+                        if [ $(docker ps -aq -f name=flask-app-test) ]; then
+                            docker stop flask-app-test || true
+                            docker rm flask-app-test || true
+                        fi
+                    '''
                     // Run the Flask app container in detached mode
                     sh 'docker run -d -p 5000:5000 --name flask-app-test ghcr.io/yohanesagenghzp/testing-cicd:latest'
                     
