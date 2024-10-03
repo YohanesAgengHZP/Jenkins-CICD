@@ -33,7 +33,7 @@ pipeline {
                     '''
                     
                     // Run the Flask app container in detached mode
-                    sh 'docker run -d -p 5000:5000 --name flask-app-test ghcr.io/yohanesagenghzp/testing-cicd:latest'
+                    sh 'docker run -d --network host -p 5000:5000 --name flask-app-test ghcr.io/yohanesagenghzp/testing-cicd:latest'
                     
                     // Wait for Flask app to start up and be ready
                     sleep 5 // Increase wait time for Flask app startup
