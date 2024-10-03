@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello, Jenkins CI/CD with Docker!"
+    return "Hello, Jenkins CI/CD with Docker!, now using github webhook"
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
