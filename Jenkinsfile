@@ -45,7 +45,7 @@ pipeline {
                         try {
                             // Check the status code and return an error if it's not 200
                             sh '''
-                                STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000/)
+                                STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://host.docker.internal:5000/)
                                 if [ "$STATUS" -ne 200 ]; then
                                     echo "Flask app returned status code $STATUS"
                                     exit 1
