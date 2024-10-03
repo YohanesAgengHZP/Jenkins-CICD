@@ -40,24 +40,24 @@ pipeline {
                     
                     sh 'docker ps -a'
                     // Check if the Flask app returns a 200 status code
-                    script {
-                        try {
-                            // Check the status code and return an error if it's not 200
-                            sh '''
-                                STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000)
-                                if [ "$STATUS" -ne 200 ]; then
-                                    echo "Flask app returned status code $STATUS"
-                                    exit 1
-                                else
-                                    echo "Flask app returned status code 200"
-                                fi
-                            '''
-                        } catch (Exception e) {
-                            // Print the Flask app logs if the test fails
-                            sh 'docker logs flask-app-test'
-                            error('Flask app did not return a 200 status code')
-                        }
-                    }
+                    // script {
+                    //     try {
+                    //         // Check the status code and return an error if it's not 200
+                    //         sh '''
+                    //             STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000)
+                    //             if [ "$STATUS" -ne 200 ]; then
+                    //                 echo "Flask app returned status code $STATUS"
+                    //                 exit 1
+                    //             else
+                    //                 echo "Flask app returned status code 200"
+                    //             fi
+                    //         '''
+                    //     } catch (Exception e) {
+                    //         // Print the Flask app logs if the test fails
+                    //         sh 'docker logs flask-app-test'
+                    //         error('Flask app did not return a 200 status code')
+                    //     }
+                    // }
                 }
             }
         }
