@@ -38,6 +38,7 @@ pipeline {
                     // Wait for Flask app to start up and be ready
                     sleep 5 // Increase wait time for Flask app startup
                     
+                    sh 'docker ps -a'
                     // Check if the Flask app returns a 200 status code
                     script {
                         try {
