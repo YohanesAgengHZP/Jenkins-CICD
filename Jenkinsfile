@@ -40,7 +40,7 @@ pipeline {
                     
                     sh 'docker ps -a'
                     sleep 2
-                    Check if the Flask app returns a 200 status code
+                    // Check if the Flask app returns a 200 status code
                     script {
                         try {
                             // Check the status code and return an error if it's not 200
